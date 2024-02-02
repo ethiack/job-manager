@@ -38,7 +38,7 @@ dev = ["ethiack-job-manager[test]"]
 all = ["ethiack-job-manager[test]", "ethiack-job-manager[dev]"]
 
 [tool.setuptools.dynamic]
-readme = {file = ["README.md"], content-type="text/markdown"}
+readme = {file = ["README.PYPI.md"], content-type="text/markdown"}
 
 [project.urls]
 Homepage = "https://ethiack.com"
