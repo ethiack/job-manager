@@ -65,7 +65,7 @@ pip install ethiack-job-manager
 
 Using Ethiack's API - and, therefore, this package - requires authentication using an *API Key* and *API Secret*, which can be retrieved in [Ethiack's Portal settings page](https://portal.ethiack.com/settings/api). These credentials must be available as environment variables `ETHIACK_API_KEY` and `ETHIACK_API_SECRET`, repectively, whenever the package is used.
 
-To setup these credentials, you can either set the environment variables directly:
+To set up these credentials, you can either set the environment variables directly:
 
 ```bash
 export ETHIACK_API_KEY=your_api_key
