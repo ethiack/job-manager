@@ -1,0 +1,65 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name =  "ethiack-job-manager"
+authors = [
+    {name = "Ethiack", email = "hello@ethiack.com"},
+]
+description = "Python package for managing jobs using Ethiack's Public API"
+dynamic = ["readme"]
+license = {file = "LICENSE"}
+version = "1.0.0rc4"
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3 :: Only",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12"
+]
+requires-python = ">=3.8"
+dependencies = [
+    "click>=8",
+    "python-dotenv",
+    "pydantic>=2",
+    "requests",
+    "rich_click",
+    "tenacity"
+]
+
+[project.optional-dependencies]
+test = ["pytest", "pytest-cov", "mypy"]
+dev = ["ethiack-job-manager[test]"]
+all = ["ethiack-job-manager[test]", "ethiack-job-manager[dev]"]
+
+[tool.setuptools.dynamic]
+readme = {file = ["README.PYPI.md"], content-type="text/markdown"}
+
+[project.urls]
+Homepage = "https://ethiack.com"
+Repository = "https://github.com/ethiack/job-manager.git"
+Issues = "https://github.com/ethiack/job-manager/issues"
+
+[project.scripts]
+ethiack-job-manager = "ethiack_job_manager.cli:cli"
+
+
+[tool.mypy]
+plugins = ["pydantic.mypy"]
+mypy_path = "$MYPY_CONFIG_FILE_DIR/src"
+packages = "ethiack_job_manager"
+ignore_missing_imports = true
+install_types = true
+show_error_codes = true
+disallow_incomplete_defs = true
+no_implicit_reexport = true
+
+[tool.pydantic-mypy]
+init_forbid_extra = true
+init_typed = true
+warn_required_dynamic_aliases = true

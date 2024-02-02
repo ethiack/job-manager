@@ -1,0 +1,128 @@
+default_language_version:
+  python: python3.11
+default_stages: [pre-commit, pre-push]
+default_install_hook_types: [pre-commit, commit-msg, pre-push]
+
+repos:
+  # General
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      # General file
+      - id: check-added-large-files
+        name: "Prevent large files from being commited without Git LFS (id: check-added-large-files)"
+        args: ["--maxkb=512"]
+        alias: file
+
+      - id: check-case-conflict
+        name: "Check for filename conflicts in case-insentive filesystems (id: check-case-conflict)"
+        alias: file
+
+      # Misc. file checks
+      - id: check-json
+        name: "Verify syntax of json files (id: check-json)"
+        alias: file
+
+      - id: check-toml
+        name: "Verify syntax of toml files (id: check-toml)"
+
+      - id: check-yaml
+        name: "Verify syntax of yaml files (id: check-yaml)"
+        alias: file
+
+      - id: check-xml
+        name: "Verify syntax of xml files (id: check-xml)"
+        alias: file
+
+      # Links
+      - id: check-symlinks
+        name: "Check for symlinks that don't point to anything (id: check-symlinks)"
+        alias: file
+
+      - id: destroyed-symlinks
+        name: "Check for destroyed symlinks (id: destroyed-symlinks)"
+        alias: file
+
+      - id: check-vcs-permalinks
+        name: "Ensure that VCS permalinks are being used (id: check-vcs-permalinks)"
+        alias: file
+
+  # Security
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: detect-private-key
+        name: "Detect private keys (id: detect-private-key)"
+        alias: security
+
+  - repo: https://github.com/Yelp/detect-secrets
+    rev: v1.4.0
+    hooks:
+      - id: detect-secrets
+        name: "Run detect-secrets for secret detection in source code (id: detect-secrets)"
+        alias: security
+
+  - repo: local
+    hooks:
+      - id: secretlint
+        name: "Run secretlint for secret detection in source code (id: secretlint)"
+        language: docker_image
+        entry: secretlint/secretlint:latest secretlint # pragma: allowlist secret
+        alias: security
+
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.5
+    hooks:
+      - id: bandit
+        name: "Run bandit for Python code vulnerability detection (id: bandit)"
+        args: [-lll, --recursive]
+        pass_filenames: true
+        alias: security
+
+  # Python
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: check-ast
+        name: "Validate Python AST (id: check-ast)"
+        alias: python
+
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.8.0
+    hooks:
+      - id: mypy
+        name: "Run mypy for static type checking (id: mypy)"
+        additional_dependencies: [requests, types-requests, "click>=8.1.6", pydantic, tenacity, rich_click]
+        args: [--strict, --ignore-missing-imports]
+
+  #- repo: https://github.com/astral-sh/ruff-pre-commit
+  #  rev: v0.1.13
+  #  hooks:
+  #    - id: ruff
+  #      args: [ --fix ]
+  #    - id: ruff-format
+
+  # VCS
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.5.0
+    hooks:
+      - id: no-commit-to-branch
+        name: "Forbid direct commit to `main`, `master`, and `staging` branches (id: no-commit-to-branch)"
+        args: [--branch, main, --branch, master] #, --branch, staging]
+        alias: vcs
+
+      - id: check-merge-conflict
+        name: "Check the presence of merge conflict strings (id: check-merge-conflict)"
+        args: [--assume-in-merge]
+        alias: vcs
+
+  - repo: https://github.com/commitizen-tools/commitizen
+    rev: v3.12.0
+    hooks:
+      - id: commitizen
+        stages: [commit-msg]
+        name: "Check commit message compliance (id: commitizen)"
+
+      - id: commitizen-branch
+        stages: [pre-push]
+        name: "Check commit message compliance (id: commitizen-branch)"

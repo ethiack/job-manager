@@ -1,0 +1,28 @@
+steps:
+  - name: 'python'
+    entrypoint: 'python'
+    args: ['-m', 'pip', 'install', '--upgrade', 'pip', 'virtualenv']
+  - name: 'python'
+    entrypoint: 'python'
+    args: ['-m', 'venv', 'venv']
+  - name: "python"
+    entrypoint: "venv/bin/pip"
+    args: ['install', 'build']
+  - name: 'python'
+    entrypoint: 'venv/bin/python'
+    args: ['-m', 'build', '--sdist', '--wheel', '--outdir', 'dist/']
+  - name: 'python'
+    entrypoint: 'venv/bin/pip'
+    args: ['install', 'twine']
+  - name: 'python'
+    entrypoint: 'bash'
+    args: ['-c', 'venv/bin/twine upload --repository pypi -u __token__ -p $$PYPI_TOKEN --skip-existing dist/*']
+    secretEnv: ['PYPI_TOKEN']
+
+availableSecrets:
+  secretManager:
+  - versionName: projects/$PROJECT_ID/secrets/pypi_token/versions/latest
+    env: 'PYPI_TOKEN'
+
+options:
+  logging: CLOUD_LOGGING_ONLY
