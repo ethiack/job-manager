@@ -1,3 +1,10 @@
+## [1.0.0-rc.4](https://github.com/ethiack/job-manager/compare/1.0.0-rc.3...1.0.0-rc.4) (2024-02-02)
+
+
+### 🚀 Features
+
+* empty ([524a1e7](https://github.com/ethiack/job-manager/commit/524a1e72323906815d0f91b4eea4f539e80fc416))
+
 ## [1.0.0-rc.3](https://github.com/ethiack/job-manager/compare/1.0.0-rc.2...1.0.0-rc.3) (2024-02-02)
 
 
