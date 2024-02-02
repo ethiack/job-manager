@@ -1,3 +1,10 @@
+## [1.0.0-rc.3](https://github.com/ethiack/job-manager/compare/1.0.0-rc.2...1.0.0-rc.3) (2024-02-02)
+
+
+### 📔 Docs
+
+* fix typo ([cabdf74](https://github.com/ethiack/job-manager/commit/cabdf74c0060acaa01028977b63af68853ffb8c5))
+
 ## [1.0.0-rc.2](https://github.com/ethiack/job-manager/compare/1.0.0-rc.1...1.0.0-rc.2) (2024-02-02)
 
 
