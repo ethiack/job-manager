@@ -1,3 +1,15 @@
+## [1.0.1-rc.1](https://github.com/ethiack/job-manager/compare/1.0.0...1.0.1-rc.1) (2024-03-18)
+
+
+### 🦊 CI/CD
+
+* freeze semantic-release version ([1ea156b](https://github.com/ethiack/job-manager/commit/1ea156b0538a5954e896774120b1f54da261766c))
+
+
+### 🛠 Fixes
+
+* fix retry condition in wait_for_job ([1c929fc](https://github.com/ethiack/job-manager/commit/1c929fcd6e665917e3a79dbeb329bb0d3a80fde3))
+
 ## [1.0.0](https://github.com/ethiack/job-manager/compare/...1.0.0) (2024-02-02)
 
 
