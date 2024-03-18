@@ -30,18 +30,20 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "lts/*"
+          node-version: "20"
       - name: Install plugins
         run: >
           npm install -D
-          @semantic-release/git
-          @semantic-release/changelog
-          conventional-changelog-conventionalcommits
-          semantic-release-pypi
-          @saithodev/semantic-release-backmerge
+          semantic-release@23.0.2
+          @semantic-release/npm@11.0.2
+          @semantic-release/git@10.0.1
+          @semantic-release/changelog@6.0.3
+          conventional-changelog-conventionalcommits@7.0.2
+          semantic-release-pypi@3.0.0
+          @saithodev/semantic-release-backmerge@4.0.1
       - name: Verify the integrity of provenance attestations and registry signatures for installed dependencies
         run: npm audit signatures
       - name: Release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx semantic-release
+        run: npx semantic-release@23.0.2
