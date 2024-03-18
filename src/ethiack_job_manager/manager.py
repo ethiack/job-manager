@@ -362,11 +362,9 @@ def wait_for_job(uuid: str,
         requests.HTTPError: If the response status code is not 2xx or 3xx.
     """
 
-    @tenacity.retry(retry=tenacity.retry_if_result(
-        lambda r: not r.success or r.success is None),
-        wait=tenacity.wait_random_exponential(multiplier=1, min=1,
-                                              max=15),
-        stop=tenacity.stop_after_delay(int(timeout)))
+    @tenacity.retry(retry=tenacity.retry_if_result(lambda r: r.success is None),
+                    wait=tenacity.wait_random_exponential(multiplier=1, min=1, max=15),
+                    stop=tenacity.stop_after_delay(int(timeout)))
     def _retry() -> JobSuccessResponse:
         return get_job_success(uuid=uuid, severity=severity, echo=False,
                                fail=False)
