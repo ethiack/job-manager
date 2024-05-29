@@ -189,8 +189,11 @@ class CancelJobResponse(pydantic.BaseModel):
     success: bool
     """Whether the job was successfully cancelled."""
 
-    message: str
+    message: str = pydantic.Field(alias="description")
     """Message from the API."""
+
+    class Config:
+        populate_by_name = True
 
 
 def cancel_job(uuid: str, echo: bool = False) -> CancelJobResponse:
@@ -303,8 +306,11 @@ class JobSuccessResponse(pydantic.BaseModel):
     success: bool | None = None
     """Whether the job was successful."""
 
-    message: str | None = None
+    message: str | None = pydantic.Field(default=None, alias="description")
     """Message from the API."""
+
+    class Config:
+        populate_by_name = True
 
 
 def get_job_success(uuid: str,

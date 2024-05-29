@@ -1,13 +1,15 @@
 """Types for the Ethiack Job Manager."""
+
 import datetime
+from typing import Annotated
 
 import pydantic
 
+from ethiack_job_manager import utils
+
+
 __all__ = ["Service", "Finding", "Job", "JobFindings"]
 
-from typing import Annotated
-
-from ethiack_job_manager import utils
 
 Url = Annotated[pydantic.AnyUrl,
                 pydantic.AfterValidator(lambda x: str(x).rstrip('/'))]
