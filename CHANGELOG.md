@@ -1,3 +1,10 @@
+## [1.0.2-rc.1](https://github.com/ethiack/job-manager/compare/1.0.1...1.0.2-rc.1) (2024-05-29)
+
+
+### 🛠 Fixes
+
+* add alias to API reponse models ([4f1a68c](https://github.com/ethiack/job-manager/commit/4f1a68c8e5f3f90ed3208fc2c64a9a38072ec99d))
+
 ## [1.0.1](https://github.com/ethiack/job-manager/compare/1.0.0...1.0.1) (2024-03-18)
 
 
