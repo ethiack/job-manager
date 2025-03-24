@@ -1,4 +1,31 @@
-"""Ethiack Job Manager"""
+# -*- coding: utf-8 -*-
+"""Ethiack Job Manager - Client for Ethiack's Public API
+
+This package provides a Python client for interacting with Ethiack's Public API
+to manage security scanning jobs. It includes functionality to check URL validity,
+launch security scans, monitor job status, retrieve results, and more.
+
+The package requires authentication through API credentials, which can be set via
+environment variables (ETHIACK_API_KEY and ETHIACK_API_SECRET) or a .env file.
+
+Modules:
+    cli: Command-line interface for the job manager
+    manager: Core functions for interacting with the Ethiack API
+    types: Type definitions and Pydantic models for job-related data
+    utils: Utility functions, enums, and helpers
+
+Basic Usage:
+    from ethiack_job_manager import manager
+
+    # Check if a URL is valid for scanning
+    response = manager.check("https://example.com")
+
+    # Launch a security scan
+    job = manager.launch_job("https://example.com")
+
+    # Wait for a job to complete and get results
+    success = manager.wait_for_job(job.uuid)
+"""
 
 from __future__ import annotations
 

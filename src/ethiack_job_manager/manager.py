@@ -1,3 +1,29 @@
+# -*- coding: utf-8 -*-
+"""Core API client functions for Ethiack Job Manager
+
+This module provides the core functions for interacting with Ethiack's Public API
+to manage security scanning jobs. It includes functions to check URL validity,
+launch jobs, cancel jobs, get job information, monitor status, and determine
+job success.
+
+Each function corresponds to a specific API endpoint and returns a Pydantic model
+representing the API response. The module handles authentication, request formatting,
+error handling, and response parsing.
+
+Functions:
+    check: Verify if a URL is valid for security scanning
+    launch_job: Launch a new security scan job
+    cancel_job: Cancel a running or queued job
+    get_job_info: Get detailed information about a specific job
+    get_jobs_list: List all jobs
+    get_job_status: Check the current status of a job
+    get_job_success: Determine if a job completed successfully
+    wait_for_job: Wait for a job to finish with exponential backoff
+
+The module uses the requests library for HTTP communication and tenacity
+for implementing retry logic when waiting for jobs to complete.
+"""
+
 import typing
 import urllib.parse
 

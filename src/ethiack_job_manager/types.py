@@ -1,4 +1,22 @@
-"""Types for the Ethiack Job Manager."""
+# -*- coding: utf-8 -*-
+"""Type definitions and Pydantic models for Ethiack Job Manager
+
+This module defines the Pydantic models that represent the data structures used
+in the Ethiack Job Manager. These models are used for validating input data,
+serializing requests to the API, and parsing responses from the API.
+
+Classes:
+    Service: Represents a target service for security scanning
+    Finding: Represents a security finding/vulnerability identified in a scan
+    Job: Represents metadata about a security scan job
+    JobFindings: Extends Job with detailed findings information
+
+Type Annotations:
+    Url: A specialized AnyUrl type that strips trailing slashes
+
+The models use Pydantic for validation, serialization, and deserialization,
+ensuring type safety and consistent data handling throughout the application.
+"""
 
 import datetime
 from typing import Annotated

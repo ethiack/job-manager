@@ -1,4 +1,24 @@
+# -*- coding: utf-8 -*-
+"""Utility functions and enums for Ethiack Job Manager
+
+This module provides utility functions and enum classes used throughout the
+Ethiack Job Manager package. It includes enums for job status and severity levels,
+as well as helper functions for handling HTTP errors and processing API responses.
+
+Classes:
+    JobStatus: Enum representing possible states of a security scan job
+    Severity: Enum representing severity levels for security findings
+
+Functions:
+    handle_http_error: Process HTTP errors from the API and provide user-friendly messages
+    process_response: Process API responses, validate with Pydantic models, and handle errors
+
+These utilities provide consistent error handling, response processing,
+and data validation across the package.
+"""
+
 import enum
+
 
 __all__ = ["JobStatus", "Severity"]
 

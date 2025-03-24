@@ -1,4 +1,35 @@
-"""The CLI for job-manager."""
+# -*- coding: utf-8 -*-
+"""Command-line interface for Ethiack Job Manager
+
+This module provides a command-line interface for interacting with Ethiack's Public API
+to manage security scanning jobs. It wraps the functionality in the manager module
+with a user-friendly CLI built using rich-click.
+
+Commands:
+    check: Verify if a URL is valid for security scanning
+    launch: Launch a new security scan job
+    cancel: Cancel a running or queued job
+    info: Get detailed information about a specific job
+    list: List all jobs
+    status: Check the current status of a job
+    success: Determine if a job completed successfully
+    await: Wait for a job to finish and get results
+
+Authentication:
+    The CLI requires API credentials to be set via environment variables
+    (ETHIACK_API_KEY and ETHIACK_API_SECRET) or in a .env file in the
+    current directory.
+
+Examples:
+    # Check if a URL is valid for scanning
+    job-manager check https://example.com
+
+    # Launch a security scan and wait for results
+    job-manager launch https://example.com --wait
+
+    # Get information about a specific job
+    job-manager info JOB_UUID
+"""
 
 import pydantic
 import rich_click as click
