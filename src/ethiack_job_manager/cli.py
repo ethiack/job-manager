@@ -1,8 +1,10 @@
 """The CLI for job-manager."""
+
 import pydantic
 import rich_click as click
 
 from ethiack_job_manager import __version__, api_auth, manager, types, utils
+
 
 click.rich_click.USE_MARKDOWN = True
 click.rich_click.SHOW_ARGUMENTS = True

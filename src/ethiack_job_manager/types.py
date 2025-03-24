@@ -18,44 +18,65 @@ Url = Annotated[pydantic.AnyUrl,
 class Service(pydantic.BaseModel):
     """Service model"""
 
-    url: Url
-    """URL of the service"""
+    url: Url = pydantic.Field(
+        description="URL of the service"
+    )
+
+    beacon_id: int | None = pydantic.Field(
+        default=None,
+        description="Beacon ID of the service"
+    )
+
+    event_slug: str | None = pydantic.Field(
+        default=None,
+        description="Event slug of the service"
+    )
 
 
 class Finding(pydantic.BaseModel):
     """Finding model"""
 
-    title: str
-    """Title of the finding"""
+    title: str = pydantic.Field(
+        description="Title of the finding"
+    )
 
-    severity: utils.Severity
-    """Severity of the finding"""
-
+    severity: utils.Severity = pydantic.Field(
+        description="Severity of the finding"
+    )
 
 class Job(pydantic.BaseModel):
     """Job model"""
 
-    uuid: str
-    """UUID of the job"""
+    uuid: str = pydantic.Field(
+        description="UUID of the job"
+    )
 
-    url: str
-    """URL of the target service"""
+    url: str = pydantic.Field(
+        description="URL of the target service"
+    )
 
-    status: str
-    """Status of the job"""
+    status: str = pydantic.Field(
+        description="Status of the job"
+    )
 
-    created: datetime.datetime
-    """Timestamp of the job creation"""
+    created: datetime.datetime = pydantic.Field(
+        description="Timestamp of the job creation"
+    )
 
-    started: datetime.datetime | None = None
-    """Timestamp of the job start"""
+    started: datetime.datetime | None = pydantic.Field(
+        default=None,
+        description="Timestamp of the job start"
+    )
 
-    finished: datetime.datetime | None = None
-    """Timestamp of the job finish"""
+    finished: datetime.datetime | None = pydantic.Field(
+        default=None,
+        description="Timestamp of the job finish"
+    )
 
 
 class JobFindings(Job):
     """JobFindings model"""
 
-    findings: list[Finding]
-    """Findings of the job"""
+    findings: list[Finding] = pydantic.Field(
+        description="Findings of the job"
+    )

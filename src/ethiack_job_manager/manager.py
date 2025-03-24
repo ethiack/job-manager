@@ -1,15 +1,13 @@
-import json
 import typing
 import urllib.parse
 
 import pydantic
 import requests
-import rich_click as click
 import tenacity
 
-from ethiack_job_manager import (api_auth, ETHIACK_API_URL,
-                                 ETHIACK_API_VER, CONNECT_TIMEOUT, READ_TIMEOUT,
-                                 types, utils)
+from ethiack_job_manager import (api_auth, CONNECT_TIMEOUT, ETHIACK_API_URL,
+                                 ETHIACK_API_VER, READ_TIMEOUT, types, utils)
+
 
 __all__ = ["check", "launch_job", "cancel_job", "get_job_info", "get_jobs_list",
            "get_job_status", "get_job_success",
@@ -17,89 +15,23 @@ __all__ = ["check", "launch_job", "cancel_job", "get_job_info", "get_jobs_list",
            "JobStatusResponse", "JobSuccessQuery", "JobSuccessResponse",
            "LaunchJobResponse", "ListJobsResponse"]
 
+from ethiack_job_manager.utils import process_response
+
+
 T = typing.TypeVar("T", bound=pydantic.BaseModel)
-
-
-def handle_http_error(err: requests.HTTPError, echo: bool, fail: bool) -> None:
-    """Handle HTTP errors.
-
-    This function will handle HTTP errors and print the error message to the
-    user. If the error is raised in a click context, it will exit the program
-    with exit code 1. Otherwise, it will re-raise the exception.
-
-    Args:
-        err (HTTPError): The HTTP error to be handled.
-        echo (bool, optional): Echo the response using click.
-        fail (bool, optional): Exit the program with nonzero code if the check
-            fails.
-    Raises:
-        requests.HTTPError: Re-raises the HTTP error if not in click context.
-    """
-    err_msg = str(err)
-
-    if "application/json" in err.response.headers.get("content-type", ""):
-        json_response = err.response.json()
-        if "error" in json_response:
-            additional_info = f"(Error) {json_response['error']}"
-        elif "validation_error" in json_response:
-            additional_info = (f"(Validation Error) "
-                               f"{json_response['validation_error']}")
-        else:
-            additional_info = f"(Unknown error) {json_response}"
-
-        err_msg = f"{err_msg}\n - Additional info: {additional_info}"
-
-    ctx = click.get_current_context(silent=True)
-    if ctx is not None and ctx.command is not None:
-        exit_code = 1 if fail else 0
-        if echo:
-            exc = click.ClickException(err_msg)
-            exc.exit_code = exit_code
-            raise exc
-        else:
-            ctx.exit(exit_code)
-    else:
-        raise requests.exceptions.HTTPError(err_msg, response=err.response)
-
-
-def process_response(response: requests.Response,
-                     model: typing.Type[T],
-                     echo: bool = False,
-                     fail: bool = True) -> T:
-    """Process a response from the API.
-
-    Args:
-        response (requests.Response): Response from the API.
-        model (T, optional): Pydantic model to validate the response.
-        echo (bool, optional): Echo the response using click. Defaults to False.
-        fail (bool, optional): Exit the program with nonzero code if the
-            response status code is not 2xx or 3xx. Defaults to True.
-    Returns:
-        T: Validated response object.
-    Raises:
-        requests.HTTPError: If the response status code is not 2xx or 3xx.
-    """
-    try:
-        response.raise_for_status()
-    except requests.HTTPError as err:
-        handle_http_error(err, echo=echo, fail=fail)
-    response_obj = model.model_validate(response.json())
-    if echo:
-        click.echo(response_obj.model_dump_json(indent=2))
-    return response_obj
 
 
 class CheckResponse(pydantic.BaseModel):
     """Response object for job validity"""
 
-    url: str
-    """URL of the service"""
-
-    valid: bool
-    """Whether the job can be submitted"""
+    url: str = pydantic.Field(description="URL of the service")
+    valid: bool = pydantic.Field(description="Whether the job is valid")
 
 
 def check(url: str | types.Url,
+          *,
+          beacon_id: int | None = None,
+          event_slug: str | None = None,
           echo: bool = False,
           fail: bool = True) -> CheckResponse:
     """Check if a URL is valid and a job can be submitted.
@@ -115,14 +47,15 @@ def check(url: str | types.Url,
         requests.HTTPError: If the response status code is not 2xx or 3xx.
     """
 
-    service = types.Service.model_validate(dict(url=url))
+    service = types.Service.model_validate(dict(url=url, beacon_id=beacon_id,
+                                                event_slug=event_slug))
     req_url = urllib.parse.urljoin(ETHIACK_API_URL,
                                    f"{ETHIACK_API_VER}/jobs/check")
     response = requests.post(req_url,
                              auth=api_auth(),
                              headers={"Content-type": "application/json",
                                       "Accept": "application/json"},
-                             data=json.dumps({"url": service.url}),
+                             data=service.model_dump_json(),
                              timeout=(CONNECT_TIMEOUT, READ_TIMEOUT))
     return process_response(response, model=CheckResponse, echo=echo,
                             fail=fail)
@@ -131,14 +64,14 @@ def check(url: str | types.Url,
 class LaunchJobResponse(pydantic.BaseModel):
     """Response from the launch job endpoint."""
 
-    url: str
-    """URL of the service"""
-
-    uuid: str
-    """UUID of the job"""
+    url: str = pydantic.Field(description="URL of the service")
+    uuid: str = pydantic.Field(description="UUID of the job")
 
 
 def launch_job(url: str | types.Url,
+               *,
+               beacon_id: int | None = None,
+               event_slug: str | None = None,
                echo: bool = False,
                wait: bool = False,
                timeout: int = 3600,
@@ -163,14 +96,15 @@ def launch_job(url: str | types.Url,
         requests.HTTPError: If the response status code is not 2xx or 3xx.
     """
 
-    service = types.Service.model_validate(dict(url=url))
+    service = types.Service.model_validate(dict(url=url, beacon_id=beacon_id,
+                                                event_slug=event_slug))
     req_url = urllib.parse.urljoin(ETHIACK_API_URL,
                                    f"{ETHIACK_API_VER}/jobs/launch")
     response = requests.post(req_url,
                              auth=api_auth(),
                              headers={"Content-type": "application/json",
                                       "Accept": "application/json"},
-                             data=json.dumps({"url": service.url}),
+                             data=service.model_dump_json(),
                              timeout=(CONNECT_TIMEOUT, READ_TIMEOUT))
 
     launch_info = process_response(response, model=LaunchJobResponse, echo=echo)
@@ -186,17 +120,20 @@ def launch_job(url: str | types.Url,
 class CancelJobResponse(pydantic.BaseModel):
     """Response from the cancel job endpoint."""
 
-    success: bool
-    """Whether the job was successfully cancelled."""
+    success: bool = pydantic.Field(
+        description="Whether the job was successfully cancelled."
+    )
 
-    message: str = pydantic.Field(alias="description")
-    """Message from the API."""
+    message: str = pydantic.Field(
+        alias="description",
+        description="Message from the API"
+    )
 
     class Config:
         populate_by_name = True
 
 
-def cancel_job(uuid: str, echo: bool = False) -> CancelJobResponse:
+def cancel_job(uuid: str, *, echo: bool = False) -> CancelJobResponse:
     """Cancel a queued or running job.
 
     Args:
@@ -218,11 +155,10 @@ def cancel_job(uuid: str, echo: bool = False) -> CancelJobResponse:
 class JobInfoResponse(pydantic.BaseModel):
     """Response from the job info endpoint."""
 
-    job: types.JobFindings
-    """Job information."""
+    job: types.JobFindings = pydantic.Field(description="Job information")
 
 
-def get_job_info(uuid: str, echo: bool = False) -> JobInfoResponse:
+def get_job_info(uuid: str, *, echo: bool = False) -> JobInfoResponse:
     """Get information about a job.
 
     Args:
@@ -244,11 +180,10 @@ def get_job_info(uuid: str, echo: bool = False) -> JobInfoResponse:
 class ListJobsResponse(pydantic.BaseModel):
     """Response from the list jobs endpoint."""
 
-    jobs: list[types.Job]
-    """List of jobs."""
+    jobs: list[types.Job] = pydantic.Field(description="List of jobs")
 
 
-def get_jobs_list(echo: bool = False) -> ListJobsResponse:
+def get_jobs_list(*, echo: bool = False) -> ListJobsResponse:
     """List all jobs.
 
     Args:
@@ -267,10 +202,10 @@ def get_jobs_list(echo: bool = False) -> ListJobsResponse:
 
 
 class JobStatusResponse(pydantic.BaseModel):
-    status: str
+    status: str = pydantic.Field(description="Status of the job")
 
 
-def get_job_status(uuid: str, echo: bool = False) -> JobStatusResponse:
+def get_job_status(uuid: str, *, echo: bool = False) -> JobStatusResponse:
     """Show the status of a job.
 
     Args:
@@ -293,21 +228,29 @@ def get_job_status(uuid: str, echo: bool = False) -> JobStatusResponse:
 class JobSuccessQuery(pydantic.BaseModel):
     """Query parameters for the job success endpoint."""
 
-    severity: utils.Severity
-    """Minimum severity level that should fail."""
+    severity: utils.Severity = pydantic.Field(
+        description="Minimum severity level that should fail."
+    )
 
-    fail: bool = True
-    """Exit with nonzero code if the job was unsuccessful."""
+    fail: bool = pydantic.Field(
+        default=True,
+        description="Exit with nonzero code if the job was unsuccessful."
+    )
 
 
 class JobSuccessResponse(pydantic.BaseModel):
     """Response from the job success endpoint."""
 
-    success: bool | None = None
-    """Whether the job was successful."""
+    success: bool | None = pydantic.Field(
+        default=None,
+        description="Whether the job was successful."
+    )
 
-    message: str | None = pydantic.Field(default=None, alias="description")
-    """Message from the API."""
+    message: str | None = pydantic.Field(
+        default=None,
+        alias="description",
+        description="Message from the API."
+    )
 
     class Config:
         populate_by_name = True
@@ -315,6 +258,7 @@ class JobSuccessResponse(pydantic.BaseModel):
 
 def get_job_success(uuid: str,
                     severity: str,
+                    *,
                     echo: bool = False,
                     fail: bool = True) -> JobSuccessResponse:
     """Retrieve the success of a job.
@@ -345,6 +289,7 @@ def get_job_success(uuid: str,
 
 
 def wait_for_job(uuid: str,
+                 *,
                  severity: str = utils.Severity.MEDIUM.value,
                  timeout: int = 3600,
                  echo: bool = False,
