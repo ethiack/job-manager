@@ -1,3 +1,10 @@
+## [1.1.0-rc.1](https://github.com/ethiack/job-manager/compare/1.0.2...1.1.0-rc.1) (2025-04-08)
+
+
+### 🚀 Features
+
+* add Multi-Event and Beacon logic ([#6](https://github.com/ethiack/job-manager/issues/6)) ([39705c3](https://github.com/ethiack/job-manager/commit/39705c3dc1d42523c28c67bd8d4090e34544f053))
+
 ## [1.0.2](https://github.com/ethiack/job-manager/compare/1.0.1...1.0.2) (2024-05-29)
 
 
