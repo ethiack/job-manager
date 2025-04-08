@@ -19,7 +19,6 @@ ensuring type safety and consistent data handling throughout the application.
 """
 
 import datetime
-from typing import Annotated
 
 import pydantic
 

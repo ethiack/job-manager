@@ -64,6 +64,8 @@ def check(url: str | pydantic.AnyUrl,
 
     Args:
         url (str | pydantic.AnyUrl): URL of the service.
+        beacon_id (int | None): Beacon ID of the service. Defaults to None.
+        event_slug (str | None): Event slug of the service. Defaults to None.
         echo (bool, optional): Echo the response using click. Defaults to False.
         fail (bool, optional): Exit the program with nonzero code if the check
         fails. Defaults to True.
@@ -109,9 +111,11 @@ def launch_job(url: str | pydantic.AnyUrl,
                fail: bool = True
                ) -> LaunchJobResponse:
     """Launch a job.
-
+    
     Args:
         url (pydantic.AnyUrl): URL of the service.
+        beacon_id (int | None): Beacon ID of the service. Defaults to None.
+        event_slug (str | None): Event slug of the service. Defaults to None.
         echo (bool, optional): Echo the response using click. Defaults to False.
         wait (bool, optional): Wait for the job to finish. Defaults to False.
         timeout (int, optional): Maximum time to wait for the job to finish in
