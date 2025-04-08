@@ -33,6 +33,7 @@ import tenacity
 
 from ethiack_job_manager import (api_auth, CONNECT_TIMEOUT, ETHIACK_API_URL,
                                  ETHIACK_API_VER, READ_TIMEOUT, types, utils)
+from ethiack_job_manager.utils import process_response
 
 
 __all__ = ["check", "launch_job", "cancel_job", "get_job_info", "get_jobs_list",
@@ -41,7 +42,6 @@ __all__ = ["check", "launch_job", "cancel_job", "get_job_info", "get_jobs_list",
            "JobStatusResponse", "JobSuccessQuery", "JobSuccessResponse",
            "LaunchJobResponse", "ListJobsResponse"]
 
-from ethiack_job_manager.utils import process_response
 
 
 T = typing.TypeVar("T", bound=pydantic.BaseModel)

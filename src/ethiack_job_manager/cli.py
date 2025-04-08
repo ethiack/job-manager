@@ -31,9 +31,10 @@ Examples:
     job-manager info JOB_UUID
 """
 
+from typing import Optional
+
 import pydantic
 import rich_click as click
-from typing import Optional
 
 from ethiack_job_manager import __version__, api_auth, manager, types, utils
 

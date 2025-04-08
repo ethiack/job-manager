@@ -18,16 +18,17 @@ and data validation across the package.
 """
 
 import enum
+import typing
+
+import pydantic
+import requests
+import rich_click as click
 
 
 __all__ = ["JobStatus", "Severity"]
 
-import typing
 
-import requests
-import rich_click as click
-
-from ethiack_job_manager.manager import T
+T = typing.TypeVar("T", bound=pydantic.BaseModel)
 
 
 class JobStatus(str, enum.Enum):
