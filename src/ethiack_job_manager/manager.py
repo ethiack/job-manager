@@ -92,6 +92,10 @@ class LaunchJobResponse(pydantic.BaseModel):
 
     url: str = pydantic.Field(description="URL of the service")
     uuid: str = pydantic.Field(description="UUID of the job")
+    success: bool = pydantic.Field(
+        default=True,
+        description="Whether the job was successfully launched."
+    )
 
 
 def launch_job(url: str | types.Url,
