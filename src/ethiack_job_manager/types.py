@@ -29,14 +29,10 @@ from ethiack_job_manager import utils
 __all__ = ["Service", "Finding", "Job", "JobFindings"]
 
 
-Url = Annotated[pydantic.AnyUrl,
-                pydantic.AfterValidator(lambda x: str(x).rstrip('/'))]
-
-
 class Service(pydantic.BaseModel):
     """Service model"""
 
-    url: Url = pydantic.Field(
+    url: pydantic.AnyUrl = pydantic.Field(
         description="URL of the service"
     )
 
@@ -49,6 +45,11 @@ class Service(pydantic.BaseModel):
         default=None,
         description="Event slug of the service"
     )
+
+    @pydantic.field_serializer("url")
+    def serialize_url(self, value: pydantic.AnyUrl) -> str:
+        """Serialize URL to string without trailing slash"""
+        return str(value).rstrip('/')
 
 
 class Finding(pydantic.BaseModel):
@@ -69,7 +70,7 @@ class Job(pydantic.BaseModel):
         description="UUID of the job"
     )
 
-    url: str = pydantic.Field(
+    url: pydantic.AnyUrl = pydantic.Field(
         description="URL of the target service"
     )
 

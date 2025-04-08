@@ -78,7 +78,7 @@ def handle_http_error(err: requests.HTTPError, echo: bool, fail: bool) -> None:
         else:
             additional_info = f"(Unknown error) {json_response}"
 
-        err_msg = f"{err_msg}\n - Additional info: {additional_info}"
+        err_msg = f"{err_msg}\n\nAdditional info: {additional_info}\n"
 
     ctx = click.get_current_context(silent=True)
     if ctx is not None and ctx.command is not None:

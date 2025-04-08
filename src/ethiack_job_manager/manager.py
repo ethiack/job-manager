@@ -54,7 +54,7 @@ class CheckResponse(pydantic.BaseModel):
     valid: bool = pydantic.Field(description="Whether the job is valid")
 
 
-def check(url: str | types.Url,
+def check(url: str | pydantic.AnyUrl,
           *,
           beacon_id: int | None = None,
           event_slug: str | None = None,
@@ -63,7 +63,7 @@ def check(url: str | types.Url,
     """Check if a URL is valid and a job can be submitted.
 
     Args:
-        url (str | types.Url): URL of the service.
+        url (str | pydantic.AnyUrl): URL of the service.
         echo (bool, optional): Echo the response using click. Defaults to False.
         fail (bool, optional): Exit the program with nonzero code if the check
         fails. Defaults to True.
@@ -98,7 +98,7 @@ class LaunchJobResponse(pydantic.BaseModel):
     )
 
 
-def launch_job(url: str | types.Url,
+def launch_job(url: str | pydantic.AnyUrl,
                *,
                beacon_id: int | None = None,
                event_slug: str | None = None,

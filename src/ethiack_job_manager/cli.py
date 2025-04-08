@@ -83,7 +83,7 @@ def cli() -> None:
               help="Echo the response using click.")
 @click.option("--fail/--no-fail", default=True, show_default=True,
               help="Exit the program with nonzero code if the check fails.")
-def _click_check(url: str | types.Url,
+def _click_check(url: str,
                  beacon_id: Optional[int],
                  event_slug: Optional[str],
                  echo: bool,
@@ -128,7 +128,7 @@ def _click_check(url: str | types.Url,
 @click.option("--fail/--no-fail", default=True, show_default=True,
               help="Exit with nonzero code if the job was unsuccessful. "
                    "Defaults to True. Only used if wait is True.")
-def _click_launch_job(url: str | types.Url,
+def _click_launch_job(url: str,
                       beacon_id: Optional[int],
                       event_slug: Optional[str],
                       echo: bool,
