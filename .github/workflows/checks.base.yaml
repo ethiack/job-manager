@@ -5,10 +5,12 @@ on:
 
 jobs:
   commitlint:
-    name: "(check) Commitlint"
+    name: (check) Commitlint
     runs-on: ubuntu-latest
     steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
       - name: Run Commitlint
-        uses: ethiack/workflow-templates/commitlint@main
+        uses: wagoid/commitlint-github-action@v5
         with:
-          token: ${{ secrets.GITHUB_TOKEN }}
+          configFile: .github/configs/commitlint.config.js
