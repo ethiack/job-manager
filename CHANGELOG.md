@@ -1,3 +1,15 @@
+## [1.1.0](https://github.com/ethiack/job-manager/compare/1.0.2...1.1.0) (2025-04-10)
+
+
+### 🦊 CI/CD
+
+* fix commitlint ([#8](https://github.com/ethiack/job-manager/issues/8)) ([e8cae17](https://github.com/ethiack/job-manager/commit/e8cae17145a81029a7a084946672b7888d9b2a42))
+
+
+### 🚀 Features
+
+* add Multi-Event and Beacon logic ([#6](https://github.com/ethiack/job-manager/issues/6)) ([39705c3](https://github.com/ethiack/job-manager/commit/39705c3dc1d42523c28c67bd8d4090e34544f053))
+
 ## [1.1.0-rc.1](https://github.com/ethiack/job-manager/compare/1.0.2...1.1.0-rc.1) (2025-04-08)
 
 
