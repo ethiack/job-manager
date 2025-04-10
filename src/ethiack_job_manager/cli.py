@@ -1,8 +1,43 @@
-"""The CLI for job-manager."""
+# -*- coding: utf-8 -*-
+"""Command-line interface for Ethiack Job Manager
+
+This module provides a command-line interface for interacting with Ethiack's Public API
+to manage security scanning jobs. It wraps the functionality in the manager module
+with a user-friendly CLI built using rich-click.
+
+Commands:
+    check: Verify if a URL is valid for security scanning
+    launch: Launch a new security scan job
+    cancel: Cancel a running or queued job
+    info: Get detailed information about a specific job
+    list: List all jobs
+    status: Check the current status of a job
+    success: Determine if a job completed successfully
+    await: Wait for a job to finish and get results
+
+Authentication:
+    The CLI requires API credentials to be set via environment variables
+    (ETHIACK_API_KEY and ETHIACK_API_SECRET) or in a .env file in the
+    current directory.
+
+Examples:
+    # Check if a URL is valid for scanning
+    job-manager check https://example.com
+
+    # Launch a security scan and wait for results
+    job-manager launch https://example.com --wait
+
+    # Get information about a specific job
+    job-manager info JOB_UUID
+"""
+
+from typing import Optional
+
 import pydantic
 import rich_click as click
 
 from ethiack_job_manager import __version__, api_auth, manager, types, utils
+
 
 click.rich_click.USE_MARKDOWN = True
 click.rich_click.SHOW_ARGUMENTS = True
@@ -40,11 +75,18 @@ def cli() -> None:
 @cli.command(name="check",
              help="Check if a URL is valid and a job can be submitted.")
 @click.argument("url")
+@click.option("--beacon-id", type=int, default=None,
+              help="Optional beacon ID to associate with the check.")
+@click.option("--event-slug", type=str, default=None,
+              help="Optional event slug to associate with the check.")
 @click.option("--echo/--no-echo", default=True, show_default=True,
               help="Echo the response using click.")
 @click.option("--fail/--no-fail", default=True, show_default=True,
               help="Exit the program with nonzero code if the check fails.")
-def _click_check(url: str | types.Url, echo: bool,
+def _click_check(url: str,
+                 beacon_id: Optional[int],
+                 event_slug: Optional[str],
+                 echo: bool,
                  fail: bool) -> manager.CheckResponse:
     """Check if a URL is valid and a job can be submitted.
 
@@ -54,7 +96,11 @@ def _click_check(url: str | types.Url, echo: bool,
         click.ClickException: If there is a validation error.
     """
     try:
-        return manager.check(url=url, echo=echo, fail=fail)
+        return manager.check(url=url,
+                             beacon_id=beacon_id,
+                             event_slug=event_slug,
+                             echo=echo,
+                             fail=fail)
     except pydantic.ValidationError as err:
         exc = click.ClickException(str(err))
         exc.exit_code = 1 if fail else 0
@@ -63,6 +109,10 @@ def _click_check(url: str | types.Url, echo: bool,
 
 @cli.command(name="launch", help="Launch a job.")
 @click.argument("url")
+@click.option("--beacon-id", type=int, default=None,
+              help="Optional beacon ID to associate with the job.")
+@click.option("--event-slug", type=str, default=None,
+              help="Optional event slug to associate with the job.")
 @click.option("--wait/--no-wait", default=False, show_default=True,
               help="Wait for the job to finish. Defaults to False.")
 @click.option("--echo/--no-echo", default=True, show_default=True,
@@ -78,7 +128,9 @@ def _click_check(url: str | types.Url, echo: bool,
 @click.option("--fail/--no-fail", default=True, show_default=True,
               help="Exit with nonzero code if the job was unsuccessful. "
                    "Defaults to True. Only used if wait is True.")
-def _click_launch_job(url: str | types.Url,
+def _click_launch_job(url: str,
+                      beacon_id: Optional[int],
+                      event_slug: Optional[str],
                       echo: bool,
                       wait: bool,
                       timeout: int,
@@ -94,6 +146,8 @@ def _click_launch_job(url: str | types.Url,
     """
     try:
         return manager.launch_job(url=url,
+                                  beacon_id=beacon_id,
+                                  event_slug=event_slug,
                                   echo=echo,
                                   wait=wait,
                                   timeout=timeout,
