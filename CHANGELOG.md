@@ -1,3 +1,15 @@
+## [1.1.2](https://github.com/ethiack/job-manager/compare/1.1.1...1.1.2) (2025-08-18)
+
+
+### 🦊 CI/CD
+
+* update commitlint configuration to use ES module syntax ([76ea2b5](https://github.com/ethiack/job-manager/commit/76ea2b5d0be53e7617224b1483ed23103d1935e6))
+
+
+### 🛠 Fixes
+
+* bump wagoid/commitlint-github-action from 5 to 6 ([135744f](https://github.com/ethiack/job-manager/commit/135744face9059f7ae2732ae9c9405c9e06d6e1a))
+
 ## [1.1.2-rc.1](https://github.com/ethiack/job-manager/compare/1.1.1...1.1.2-rc.1) (2025-08-18)
 
 
