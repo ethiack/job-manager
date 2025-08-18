@@ -1,3 +1,10 @@
+## [1.1.1-rc.1](https://github.com/ethiack/job-manager/compare/1.1.0...1.1.1-rc.1) (2025-08-18)
+
+
+### 📔 Docs
+
+* updating company legal name ([bce87d1](https://github.com/ethiack/job-manager/commit/bce87d1a5c765736506795e8a3cc144bfd26966b))
+
 ## [1.1.0](https://github.com/ethiack/job-manager/compare/1.0.2...1.1.0) (2025-04-10)
 
 
