@@ -1,3 +1,10 @@
+## [1.1.3-rc.1](https://github.com/ethiack/job-manager/compare/1.1.2...1.1.3-rc.1) (2025-10-15)
+
+
+### 📔 Docs
+
+* updating logo ([829d1f1](https://github.com/ethiack/job-manager/commit/829d1f178ef984f69c4bad8fc9224eee97319ce8))
+
 ## [1.1.2](https://github.com/ethiack/job-manager/compare/1.1.1...1.1.2) (2025-08-18)
 
 
