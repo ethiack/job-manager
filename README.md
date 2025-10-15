@@ -16,7 +16,7 @@
 
 <h1>
   <br>
-    <img src="assets/logo.webp" alt="logo" width="400">
+    <img src="assets/logo.png" alt="logo" width="400">
     <br><br>
     Ethiack Job Manager
     <br><br>
